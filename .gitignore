@@ -1,0 +1,3 @@
+__pycache__/
+*.py[cod]
+option_dashboard/assets/*.wav
