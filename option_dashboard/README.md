@@ -1,81 +1,59 @@
-# Option Dashboard
+# AI Powered 0DTE Short Straddle Monitor
 
-A production-oriented Streamlit dashboard for Zerodha option sellers monitoring manually placed **0 DTE Short Straddles**.
+A modular Streamlit trading workstation for Indian index option sellers. The app keeps the original Zerodha short-straddle monitoring workflow and adds a complete pre-trade risk gate, market-regime engine, strategy selector, Greeks, analytics, backtesting, broker abstraction, and professional dashboard panels.
 
-## Features
+## Key Capabilities
 
-- Zerodha Kite Connect login status and live position reading.
-- Automatic short straddle detection from open short CE and PE positions.
-- Live combined premium, MTM, profit percentage, ROI, premium decay, and holding timer.
-- Profit target cards for 30%, 50%, 60%, and 70% premium decay.
-- Stop-loss cards for 10%, 15%, 20%, and 25% premium expansion.
-- One-shot success alerts for targets and continuous alarm for stop loss until dismissed.
-- Alert WAV files are generated locally at runtime to avoid committing binary assets.
-- Append-only CSV journal for completed/manual exits.
-- Clean module boundaries for future Telegram, WhatsApp, auto-exit, and multi-strategy support.
+- **Priority #1 No Trade Filter**: RBI policy, budget day, global events, India VIX level/spike, gap, opening range, ADX, VWAP distance, circuit day, IV, liquidity, expiry overlap, and exchange-issue filters.
+- **Pre-Trade Checklist**: 12 checks with pass count such as `10/12`.
+- **Trade Quality Score**: 0-100 weighted score across VWAP, opening range, VIX, IV, OI, PCR, news, time, liquidity, and premium decay.
+- **Market Regime Detection**: SIDEWAYS, TRENDING, VOLATILE, EXPANSION, MEAN REVERSION, or NO TRADE using VWAP, ATR, ADX, SuperTrend state, EMAs, breadth, and opening range.
+- **Auto Strategy Engine**: ATM short straddle, OTM1 short strangle, iron condor, wide iron condor, or skip-trade recommendation.
+- **Auto Strike Selection**: ATM/OTM strikes, expected premium, theta, POP, and recommended call/put strikes.
+- **Greeks Panel**: Delta, gamma, theta, vega, IV, IV rank, IV percentile, bid/ask, OI, and volume.
+- **Risk Engine**: Capital, margin, max risk, combined premium, 30/40/50/60 stop levels, target, expected return, risk/reward, and probability of profit.
+- **Live Monitor**: Large P&L, current premium, remaining risk, IV, risk/trend gauges, and heat map.
+- **AI Trade Assistant**: Natural-language assessment of regime, VWAP, IV stability, premium decay, score, strategy, and confidence.
+- **Exit Engine**: Combined SL, target, VWAP break, ADX rise, IV spike, time exit, trend reversal, and premium expansion reasons.
+- **Journal + Analytics**: CSV trade records, screenshot placeholder, trade score, strategy, market type, P&L, mistakes, learning notes, win rate, expectancy, Sharpe, drawdown, profit factor, timing stats, monthly/yearly reports.
+- **Backtest Engine**: Deterministic research stub for 30/90/180/365 day windows with CAGR, win rate, drawdown, and profit factor.
+- **Broker Architecture**: `Broker` interface plus `DummyBroker`, ready for Zerodha, Dhan, Fyers, and Angel adapters.
 
-## Folder Structure
+## Project Structure
 
 ```text
 option_dashboard/
+├── analytics.py
 ├── app.py
-├── kite_api.py
-├── monitor.py
+├── broker.py
 ├── calculations.py
-├── journal.py
 ├── config.py
+├── dashboard.py
+├── greeks.py
+├── indicators.py
+├── journal.py
+├── kite_api.py
+├── main.py
+├── market.py
+├── monitor.py
+├── risk.py
+├── signals.py
+├── sound_assets.py
+├── storage.py
+├── strategy.py
+├── utils.py
 ├── requirements.txt
-├── trades.csv
-├── assets/
-│   ├── README.md
-│   ├── success.wav  # runtime-generated, git-ignored
-│   └── alarm.wav    # runtime-generated, git-ignored
-└── README.md
+└── assets/
 ```
-
-## Installation
-
-```bash
-cd option_dashboard
-python3.12 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-```
-
-## API Setup
-
-Create `option_dashboard/.env`:
-
-```env
-API_KEY=your_kite_api_key
-API_SECRET=your_kite_api_secret
-ACCESS_TOKEN=your_daily_access_token
-REFRESH_INTERVAL=2
-```
-
-Kite access tokens are session-scoped. Generate and update `ACCESS_TOKEN` before market monitoring each day.
 
 ## Running
 
 ```bash
-streamlit run app.py
+cd option_dashboard
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+streamlit run main.py
 ```
 
-The trader should place the straddle manually in Zerodha. The dashboard reads open positions and detects a CE/PE short pair with the same underlying, expiry, and strike.
-
-## Screenshots
-
-Add screenshots here after deploying or running locally:
-
-- Main dashboard placeholder
-- Target cards placeholder
-- Stop-loss alert placeholder
-
-## Future Enhancements
-
-- SQLite persistence for trades and intraday premium history.
-- Telegram and WhatsApp alerts.
-- Optional guarded auto-exit order placement.
-- Multiple simultaneous strategies.
-- Iron Condor, Strangle, and Calendar Spread monitors.
-- Broker abstraction beyond Zerodha.
+The system runs in demo/paper mode without credentials. To enable Zerodha status checks, create `option_dashboard/.env` with `API_KEY`, `API_SECRET`, and daily `ACCESS_TOKEN`.
