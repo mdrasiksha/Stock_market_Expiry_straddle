@@ -4,3 +4,5 @@ kiteconnect>=5.0.1
 pandas>=2.2.2
 plotly>=5.22.0
 python-dotenv>=1.0.1
+
+numpy>=2.0.0
