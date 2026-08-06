@@ -26,7 +26,7 @@ class Settings:
     refresh_interval: int = field(default_factory=lambda: int(os.getenv("REFRESH_INTERVAL", "2")))
     capital: float = field(default_factory=lambda: float(os.getenv("CAPITAL", "500000")))
     risk_percent: float = field(default_factory=lambda: float(os.getenv("RISK_PERCENT", "1.0")))
-    sl_percent: float = field(default_factory=lambda: float(os.getenv("SL_PERCENT", "30")))
+    sl_percent: float = field(default_factory=lambda: float(os.getenv("SL_PERCENT", "50")))
     target_percent: float = field(default_factory=lambda: float(os.getenv("TARGET_PERCENT", "50")))
     vix_threshold: float = field(default_factory=lambda: float(os.getenv("VIX_THRESHOLD", "18")))
     paper_trading: bool = field(default_factory=lambda: os.getenv("PAPER_TRADING", "true").lower() == "true")
